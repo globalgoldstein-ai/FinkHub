@@ -1,4 +1,4 @@
-// FinkHub | Session 5 | Build 2 | 2026-03-31 | FinkLedger URL updated
+// FinkHub | Session 5 | Build 3 | 2026-03-31 09:00 ET | Remove hero portrait, larger quote font, 30s rotation
 
 import { useState, useEffect } from "react";
 
@@ -13,7 +13,6 @@ styleEl.textContent = `
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: #1f2937; }
   ::-webkit-scrollbar-thumb { background: #374151; border-radius: 2px; }
-  @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
   .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
   .card-hover:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.4) !important; }
   .launch-btn { transition: filter 0.15s ease, transform 0.1s ease; }
@@ -107,7 +106,8 @@ function LoginScreen({ onLogin }) {
 // ── Hub Screen ────────────────────────────────────────────────────────────────
 
 function HubScreen() {
-  const [quoteIdx, setQuoteIdx]       = useState(function() { return Math.floor(Math.random() * QUOTES.length); });
+  // Pick a random quote on mount; rotate every 30s
+  const [quoteIdx, setQuoteIdx]         = useState(function() { return Math.floor(Math.random() * QUOTES.length); });
   const [quoteVisible, setQuoteVisible] = useState(true);
 
   useEffect(function() {
@@ -117,7 +117,7 @@ function HubScreen() {
         setQuoteIdx(function(i) { return (i + 1) % QUOTES.length; });
         setQuoteVisible(true);
       }, 400);
-    }, 4000);
+    }, 30000); // 30 seconds
     return function() { clearInterval(iv); };
   }, []);
 
@@ -129,9 +129,20 @@ function HubScreen() {
         <div style={{
           display: "flex", alignItems: "center", gap: 8,
           background: SURFACE, border: "1px solid " + BORDER,
-          borderRadius: 100, padding: "6px 16px 6px 10px",
+          borderRadius: 100, padding: "4px 16px 4px 4px",
         }}>
-          <img src="/fink-head.png" alt="" style={{ width: 24, height: 24, borderRadius: "50%", objectFit: "cover" }} />
+          {/* Larger portrait filling the circle */}
+          <div style={{
+            width: 36, height: 36, borderRadius: "50%",
+            overflow: "hidden", flexShrink: 0,
+            border: "2px solid " + TEAL + "60",
+          }}>
+            <img
+              src="/fink-head.png"
+              alt="Jim Fink"
+              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+            />
+          </div>
           <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 600, color: TEAL, letterSpacing: 0.5 }}>FinkHub</span>
           <span style={{ fontSize: 10, color: MUTED, background: "#ffffff0d", padding: "2px 7px", borderRadius: 10, letterSpacing: 0.5 }}>BETA</span>
         </div>
@@ -143,25 +154,6 @@ function HubScreen() {
         display: "flex", flexDirection: "column", alignItems: "center",
         paddingTop: 52, paddingBottom: 48, textAlign: "center",
       }}>
-        {/* Floating Fink portrait with glow */}
-        <div style={{ position: "relative", marginBottom: 28, animation: "float 6s ease-in-out infinite" }}>
-          <div style={{
-            position: "absolute", inset: -6, borderRadius: "50%",
-            background: "conic-gradient(from 0deg, " + GREEN + ", " + TEAL + ", " + GREEN + ")",
-            opacity: 0.45, filter: "blur(10px)",
-          }} />
-          <img
-            src="/fink-head.png"
-            alt="Jim Fink"
-            style={{
-              width: 120, height: 120, borderRadius: "50%",
-              objectFit: "cover", position: "relative",
-              border: "3px solid rgba(255,255,255,0.12)",
-              boxShadow: "0 0 40px rgba(0,188,212,0.25), 0 0 80px rgba(76,175,80,0.12)",
-            }}
-          />
-        </div>
-
         {/* Title */}
         <h1 style={{
           fontFamily: SANS, fontSize: "clamp(32px, 6vw, 46px)", fontWeight: 700,
@@ -184,12 +176,12 @@ function HubScreen() {
 
         {/* Rotating quote */}
         <div style={{
-          minHeight: 60, display: "flex", alignItems: "center",
-          justifyContent: "center", maxWidth: 560,
+          minHeight: 80, display: "flex", alignItems: "center",
+          justifyContent: "center", maxWidth: 600,
         }}>
           <p style={{
-            fontFamily: MONO, fontSize: 11.5, color: DIM,
-            fontStyle: "italic", lineHeight: 1.75, textAlign: "center",
+            fontFamily: MONO, fontSize: 15, color: DIM,
+            fontStyle: "italic", lineHeight: 1.8, textAlign: "center",
             opacity: quoteVisible ? 1 : 0,
             transform: quoteVisible ? "translateY(0)" : "translateY(5px)",
             transition: "opacity 0.4s ease, transform 0.4s ease",
@@ -314,7 +306,7 @@ function HubScreen() {
           Powered by Fidelity data · Not affiliated with Fidelity Investments
         </div>
         <div style={{ fontFamily: MONO, fontSize: 10, color: "#374151", marginTop: 4 }}>
-          FinkHub · Session 5 · Build 2 · 2026-03-31
+          FinkHub · Session 5 · Build 3 · 2026-03-31
         </div>
       </footer>
     </div>
