@@ -1,4 +1,4 @@
-// FinkHub | Session 5 | Build 6 | 2026-04-01 10:00 ET | Extract quotes to quotes.js
+// FinkHub | Session 5 | Build 7 | 2026-04-01 11:00 ET | Bouncing head, italic larger quotes
 
 import { useState, useEffect } from "react";
 import { QUOTES } from "./quotes";
@@ -52,6 +52,11 @@ styleEl.textContent = `
     border-top-color: #2d3748;
   }
   .app-card:hover .tooltip { opacity: 1; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-10px); }
+  }
+  .fink-head-bounce { animation: float 3s ease-in-out infinite; }
   @media (max-width: 640px) {
     .tooltip { width: 200px; font-size: 11px; }
   }
@@ -130,7 +135,7 @@ function HubScreen() {
       {/* ── Hero: Head ── */}
       <div style={{ paddingTop: 72, display: "flex", flexDirection: "column", alignItems: "center" }}>
 
-        <div style={{ position: "relative", marginBottom: 24 }}>
+        <div className="fink-head-bounce" style={{ position: "relative", marginBottom: 24 }}>
           <div style={{
             position: "absolute", inset: -10, borderRadius: "50%",
             background: "radial-gradient(circle, rgba(0,188,212,0.2) 0%, transparent 70%)",
@@ -173,7 +178,8 @@ function HubScreen() {
           marginBottom: 52, padding: "0 8px",
         }}>
           <p style={{
-            fontFamily: SANS, fontSize: 16, color: MUTED,
+            fontFamily: SANS, fontSize: 18, color: MUTED,
+            fontStyle: "italic",
             lineHeight: 1.7, textAlign: "center",
             opacity: quoteVisible ? 1 : 0,
             transform: quoteVisible ? "translateY(0)" : "translateY(4px)",
