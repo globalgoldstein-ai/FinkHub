@@ -11,8 +11,8 @@ Three React/Vite apps deployed on Bolt.new, linked to GitHub (`globalgoldstein-a
 | App | Repo | Live URL | Purpose |
 |---|---|---|---|
 | FinkHub | globalgoldstein-ai/FinkHub | https://finkhub.netlify.app/ | Landing page / navigation hub |
-| FinkWatch | `globalgoldstein-ai/FinkWatch` | https://globalgoldstein-ai-f-7vz9.bolt.host/ | Open position monitor |
-| FinkLedger | `globalgoldstein-ai/FinkLedger` | https://globalgoldstein-ai-f-7x9u.bolt.host/ | Realized P&L tracker |
+| FinkWatch | globalgoldstein-ai/FinkWatch | https://finkwatch.netlify.app/ | Open position monitor |
+| FinkLedger | globalgoldstein-ai/FinkLedger | https://finkledger.netlify.app/ | Realized P&L tracker |
 
 All three apps are built on **Jim Fink's Options for Income** strategy (credit spreads, income generation, defined risk).
 
