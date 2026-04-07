@@ -1,5 +1,9 @@
-// FinkHub | Phase 1 | Session 1 | Build 1 | 2026-04-07 | Ledger page placeholder
+// FinkHub | Phase 1 | Session 1 | Build 1 | 2026-04-07 | Ledger placeholder
 
 export default function Ledger() {
-  return <div style={{ color: "#f1f5f9", padding: "24px" }}>FinkLedger coming soon</div>;
+  return (
+    <div style={{ padding: "32px", color: "#f1f5f9", fontFamily: "monospace" }}>
+      📒 FinkLedger — full port coming next session
+    </div>
+  );
 }

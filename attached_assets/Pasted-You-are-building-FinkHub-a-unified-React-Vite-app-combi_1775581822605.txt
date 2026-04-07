@@ -1,0 +1,84 @@
+You are building FinkHub — a unified React/Vite app combining FinkWatch 
+and FinkLedger under React Router.
+
+REPO: globalgoldstein-ai/FinkHub (already synced)
+CURRENT STATE: src/App.jsx is a standalone landing page. src/quotes.js 
+exists. No router yet.
+
+━━━ STEP 1 — Install ━━━
+Run: npm install react-router-dom
+
+━━━ STEP 2 — Files to create/replace ━━━
+- src/App.jsx          (replace)
+- src/components/Layout.jsx  (new)
+- src/pages/Landing.jsx      (new)
+- src/pages/Watch.jsx        (new — placeholder only)
+- src/pages/Ledger.jsx       (new — placeholder only)
+DO NOT touch: src/quotes.js
+
+━━━ RULES ━━━
+- Line 1 of every src file: // FinkHub | Phase 1 | Session 1 | Build 1 | 2026-04-07 | [description]
+- Theme: bg #0a0f1c, tiles #1a2234, text #f1f5f9, muted #94a3b8, border #2d3748
+- Accents: amber #f59e0b (Hub), green #22c55e (Watch), teal #14b8a6 (Ledger)
+- Fonts: DM Sans body, IBM Plex Mono numbers/code
+
+━━━ src/App.jsx ━━━
+BrowserRouter wrapping Routes. Three routes:
+  /        → Landing (wrapped in Layout)
+  /watch   → Watch  (wrapped in Layout)
+  /ledger  → Ledger (wrapped in Layout)
+
+━━━ src/components/Layout.jsx ━━━
+Sticky top banner, height 52px, bg #1a2234, border-bottom 1px solid #2d3748:
+  Left:   28px circular /fink-head.png + "FinkHub" in IBM Plex Mono, color #f1f5f9
+  Center: section label — "Hub" on /, "Watch" on /watch, "Ledger" on /ledger
+  Right:  empty div (placeholder for Phase 2 user menu)
+
+Desktop (≥768px): NavLink tabs in banner row — Hub | Watch | Ledger
+  Active tab: bottom border 2px in accent color (amber/green/teal)
+
+Mobile (<768px): fixed bottom tab bar, height 56px, bg #1a2234, border-top 1px solid #2d3748
+  Three tabs: 🏠 Hub | 📊 Watch | 📒 Ledger
+  Active tab text colored in its accent color
+
+Render <Outlet /> below banner. On mobile add padding-bottom 72px so 
+content clears the tab bar.
+
+━━━ src/pages/Landing.jsx ━━━
+Port HubScreen from current src/App.jsx with these changes:
+- Replace <a href={FINKWATCH_URL}> with <Link to="/watch">
+- Replace <a href={FINKLEDGER_URL}> with <Link to="/ledger">
+- Remove LoginScreen and isAuthenticated — no auth in Phase 1
+- Remove the standalone page header (Layout provides chrome now)
+- Keep: bouncing portrait animation, rotating quotes (import QUOTES 
+  from ../quotes), app cards with hover tooltips, BETA badge, footer
+- "Coming Soon" state on Ledger card is removed — it links to /ledger
+- Update colors to new theme tokens above
+
+━━━ src/pages/Watch.jsx ━━━
+Placeholder:
+export default function Watch() {
+  return (
+    <div style={{padding:"32px",color:"#f1f5f9",fontFamily:"monospace"}}>
+      📊 FinkWatch — full port coming next session
+    </div>
+  );
+}
+
+━━━ src/pages/Ledger.jsx ━━━
+Placeholder:
+export default function Ledger() {
+  return (
+    <div style={{padding:"32px",color:"#f1f5f9",fontFamily:"monospace"}}>
+      📒 FinkLedger — full port coming next session
+    </div>
+  );
+}
+
+After completing all files, run the dev server and confirm:
+- / loads Landing with bouncing portrait and rotating quotes
+- /watch loads the Watch placeholder
+- /ledger loads the Ledger placeholder  
+- Bottom tab bar visible on narrow viewport
+- Top tabs visible on wide viewport
+- Navigation between all three routes works

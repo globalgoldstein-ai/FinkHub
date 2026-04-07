@@ -15,8 +15,8 @@ styleEl.textContent = `
   body { background: #0a0f1c; }
   button, a { font-family: 'DM Sans', sans-serif; }
   ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: #1f2937; }
-  ::-webkit-scrollbar-thumb { background: #374151; border-radius: 2px; }
+  ::-webkit-scrollbar-track { background: #1a2234; }
+  ::-webkit-scrollbar-thumb { background: #2d3748; border-radius: 2px; }
   .app-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     position: relative;
@@ -38,10 +38,10 @@ styleEl.textContent = `
   .tooltip {
     position: absolute; bottom: calc(100% + 10px); left: 50%;
     transform: translateX(-50%);
-    background: #0f1724; border: 1px solid #2d3748;
+    background: #0a0f1c; border: 1px solid #2d3748;
     border-radius: 8px; padding: 10px 14px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 12px; color: #9ca3af; line-height: 1.6;
+    font-size: 12px; color: #94a3b8; line-height: 1.6;
     width: 240px; text-align: center;
     box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     pointer-events: none; z-index: 10;

@@ -1,64 +1,33 @@
-// FinkHub | Phase 1 | Session 1 | Build 1 | 2026-04-07 | Landing page with HubScreen and LoginScreen
+// FinkHub | Phase 1 | Session 1 | Build 1 | 2026-04-07 | Hub landing page — bouncing portrait, rotating quotes, app cards
 
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { QUOTES } from "../quotes";
 
-const BG      = "#111827";
-const SURFACE = "#1f2937";
+const BG      = "#0a0f1c";
+const SURFACE = "#1a2234";
 const BORDER  = "#2d3748";
 const HEAD    = "#f1f5f9";
-const MUTED   = "#9ca3af";
-const DIM     = "#6b7280";
-const GREEN   = "#4CAF50";
-const TEAL    = "#00BCD4";
+const MUTED   = "#94a3b8";
+const DIM     = "#64748b";
+const GREEN   = "#22c55e";
+const TEAL    = "#14b8a6";
 const SANS    = "'DM Sans', sans-serif";
 const MONO    = "'IBM Plex Mono', monospace";
 
-const FINKWATCH_URL  = "https://finkwatch.netlify.app/";
-const FINKLEDGER_URL = "https://finkledger.netlify.app/";
-
-function LoginScreen({ onLogin }) {
-  return (
-    <div style={{
-      minHeight: "100vh", background: BG,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      fontFamily: SANS, color: HEAD, padding: 24,
-    }}>
-      <div style={{
-        background: SURFACE, border: "1px solid " + BORDER,
-        borderRadius: 16, padding: "40px 32px",
-        textAlign: "center", maxWidth: 360, width: "100%",
-      }}>
-        <img src="/fink-head.png" alt=""
-          style={{ width: 72, height: 72, borderRadius: "50%", marginBottom: 20,
-                   objectFit: "cover", objectPosition: "center top" }} />
-        <div style={{ fontFamily: MONO, fontSize: 22, color: TEAL, marginBottom: 8 }}>FinkHub</div>
-        <div style={{ color: DIM, fontSize: 14, marginBottom: 28 }}>Login coming soon</div>
-        <button onClick={onLogin} style={{
-          padding: "12px 32px", background: TEAL, color: "#fff",
-          border: "none", borderRadius: 8, fontSize: 15,
-          fontWeight: 700, cursor: "pointer", fontFamily: SANS, minHeight: 44,
-        }}>
-          Continue
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function HubScreen() {
-  const [quoteIdx, setQuoteIdx]         = useState(function() { return Math.floor(Math.random() * QUOTES.length); });
+export default function Landing() {
+  const [quoteIdx, setQuoteIdx]         = useState(() => Math.floor(Math.random() * QUOTES.length));
   const [quoteVisible, setQuoteVisible] = useState(true);
 
-  useEffect(function() {
-    const iv = setInterval(function() {
+  useEffect(() => {
+    const iv = setInterval(() => {
       setQuoteVisible(false);
-      setTimeout(function() {
-        setQuoteIdx(function(i) { return (i + 1) % QUOTES.length; });
+      setTimeout(() => {
+        setQuoteIdx(i => (i + 1) % QUOTES.length);
         setQuoteVisible(true);
       }, 400);
     }, 30000);
-    return function() { clearInterval(iv); };
+    return () => clearInterval(iv);
   }, []);
 
   return (
@@ -68,13 +37,13 @@ function HubScreen() {
       display: "flex", flexDirection: "column", alignItems: "center",
     }}>
 
-      {/* ── Hero: Head ── */}
-      <div style={{ paddingTop: 72, display: "flex", flexDirection: "column", alignItems: "center" }}>
+      {/* ── Hero: Bouncing Portrait ── */}
+      <div style={{ paddingTop: 64, display: "flex", flexDirection: "column", alignItems: "center" }}>
 
         <div className="fink-head-bounce" style={{ position: "relative", marginBottom: 24 }}>
           <div style={{
             position: "absolute", inset: -10, borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(0,188,212,0.2) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(20,184,166,0.2) 0%, transparent 70%)",
             filter: "blur(10px)",
           }} />
           <img
@@ -84,7 +53,7 @@ function HubScreen() {
               width: 160, height: 160, borderRadius: "50%",
               objectFit: "cover", objectPosition: "center top",
               position: "relative",
-              boxShadow: "0 0 40px rgba(0,188,212,0.18), 0 8px 32px rgba(0,0,0,0.45)",
+              boxShadow: "0 0 40px rgba(20,184,166,0.18), 0 8px 32px rgba(0,0,0,0.45)",
             }}
           />
         </div>
@@ -142,16 +111,15 @@ function HubScreen() {
           boxShadow: "0 2px 12px rgba(0,0,0,0.2)",
         }}>
           <div className="tooltip">
-            Real-time position monitor with risk alerts, status badges, and Fidelity import. Updates weekly.
+            Real-time position monitor with risk alerts, status badges, and Fidelity import.
           </div>
           <div>
             <div style={{ fontSize: 18, fontWeight: 700, color: HEAD, marginBottom: 4 }}>FinkWatch</div>
             <div style={{ fontSize: 13.5, color: MUTED }}>Monitor your open positions</div>
           </div>
-          <a href={FINKWATCH_URL} target="_blank" rel="noopener noreferrer"
-            className="launch-btn" style={{ background: GREEN, marginTop: 4 }}>
-            Launch &rarr;
-          </a>
+          <Link to="/watch" className="launch-btn" style={{ background: GREEN, marginTop: 4 }}>
+            Open &rarr;
+          </Link>
         </div>
 
         {/* FinkLedger */}
@@ -169,19 +137,9 @@ function HubScreen() {
             <div style={{ fontSize: 18, fontWeight: 700, color: HEAD, marginBottom: 4 }}>FinkLedger</div>
             <div style={{ fontSize: 13.5, color: MUTED }}>Track your P&amp;L</div>
           </div>
-          <a
-            href={FINKLEDGER_URL === "#" ? undefined : FINKLEDGER_URL}
-            target="_blank" rel="noopener noreferrer"
-            className="launch-btn"
-            style={{
-              background: FINKLEDGER_URL === "#" ? "#374151" : TEAL,
-              marginTop: 4,
-              pointerEvents: FINKLEDGER_URL === "#" ? "none" : "auto",
-              opacity: FINKLEDGER_URL === "#" ? 0.5 : 1,
-            }}
-          >
-            {FINKLEDGER_URL === "#" ? "Coming Soon" : "Launch \u2192"}
-          </a>
+          <Link to="/ledger" className="launch-btn" style={{ background: TEAL, marginTop: 4 }}>
+            Open &rarr;
+          </Link>
         </div>
       </div>
 
@@ -193,14 +151,4 @@ function HubScreen() {
       </footer>
     </div>
   );
-}
-
-export default function Landing() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-
-  if (!isAuthenticated) {
-    return <LoginScreen onLogin={function() { setIsAuthenticated(true); }} />;
-  }
-
-  return <HubScreen />;
 }
