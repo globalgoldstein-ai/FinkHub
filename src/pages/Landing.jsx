@@ -14,8 +14,8 @@ const TEAL    = "#00BCD4";
 const SANS    = "'DM Sans', sans-serif";
 const MONO    = "'IBM Plex Mono', monospace";
 
-const FINKWATCH_URL  = "https://globalgoldstein-ai-f-7vz9.bolt.host/";
-const FINKLEDGER_URL = "https://globalgoldstein-ai-f-7x9u.bolt.host/";
+const FINKWATCH_URL  = "https://finkwatch.netlify.app/";
+const FINKLEDGER_URL = "https://finkledger.netlify.app/";
 
 function LoginScreen({ onLogin }) {
   return (
