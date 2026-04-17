@@ -1,7 +1,29 @@
-// FinkHub | Phase 1 | Session 2 | Build 2 | 2026-04-17 | Port FinkLedger
+// FinkLedger | Session 5 | Build 1 | 2026-04-05 14:00 ET | Remove splash screen
 
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { Link } from "react-router-dom";
+
+// ── Style Injection ───────────────────────────────────────────────────────────
+const styleEl = document.createElement("style");
+styleEl.textContent = `
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #111827; }
+  button { font-family: 'DM Sans', sans-serif; }
+  textarea { font-family: 'IBM Plex Mono', monospace; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #1f2937; }
+  ::-webkit-scrollbar-thumb { background: #374151; border-radius: 2px; }
+  @keyframes fadeIn    { from { opacity: 0; }                           to { opacity: 1; } }
+  @keyframes fadeOut   { from { opacity: 1; }                           to { opacity: 0; } }
+  @keyframes expandIn  { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideUp   { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes toastIn   { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .ticker-row:hover    { background: #1a2436 !important; }
+  .icon-btn:hover      { background: rgba(255,255,255,0.2) !important; }
+  .pill-btn:active     { opacity: 0.7; }
+`;
+document.head.appendChild(styleEl);
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const STORAGE_KEY   = "fl-transactions-v1";
@@ -23,8 +45,26 @@ const VIOLET        = "#a78bfa";
 const AMBER         = "#fbbf24";
 const SKY           = "#38bdf8";
 const ORANGE        = "#fb923c";
+const FINKWATCH_URL = "https://globalgoldstein-ai-f-7vz9.bolt.host/";
 
 const FINK_IMAGE = "/fink-head.png";
+
+const SPLASH_QUOTES = [
+  "Options Spreads: It's basically sports betting for people who own too many Patagonia vests and like to pretend their parlays are \"mathematical models.\"",
+  "The \"Hedge\": Using a spread is just losing money with a seatbelt on\u2014it's like betting on Red at the casino while also betting on \"Not-Quite-As-Red\" so you can call it risk management.",
+  "Iron Condors: This strategy involves picking two numbers the stock won't hit; it's the financial version of charging the market rent for staying in its room\u2014right up until the market decides to move out in the middle of the night.",
+  "Covered Calls: The \"I'm the House\" strategy, until the stock moons and you realize you're the only person who sold their house at 2019 prices while your neighbors are all retiring on Mars.",
+  "0DTE (Zero Days to Expiration): Buying these is just paying a premium to watch a countdown timer tell you your net worth is now officially a tax write-off.",
+  "Buying Puts: It's like buying fire insurance on your neighbor's house, except you're secretly standing in their driveway with a match praying for a \"market correction.\"",
+  "The Greeks: Delta, Gamma, and Theta aren't math; they're just the names of the monsters under an options trader's bed that eat their account balance while they sleep.",
+  "Theta Decay: The slow, agonizing process of watching your portfolio evaporate purely because the Earth continues to rotate around the Sun.",
+  "Implied Volatility (IV) Crush: This is the market's way of saying, \"I know you were right about the earnings report, but I'm still going to take your lunch money because you were too excited about it.\"",
+  "Margin Calls: The ultimate \"Game Over\" screen that proves your \"sophisticated strategy\" was actually just three casinos stacked on top of each other in a trench coat.",
+  "The Ice Cube: Buying an option is like buying a literal ice cube in the desert. You might have a great plan for it, but Theta is the sun that doesn't care about your \"thesis.\"",
+  "The Weekend Tax: Theta is the only thief that works Saturdays. You go to sleep Friday feeling like a genius and wake up Monday to find your portfolio evaporated 15% just because the Earth kept spinning.",
+  "The \"Hope\" Drain: Theta is the realization that even if the stock finally goes your way, you spent more on time decay than the profit is worth. It's like winning a race but spending the prize money on gas to get to the track.",
+  "The Seller's Employee: If you're selling options, Theta is your loyal worker who never takes a day off. If you're buying them, Theta is the high-interest credit card you forgot to pay.",
+];
 
 const ACTION_META = {
   STO:         { label: "STO",  color: TEAL,   bg: TEAL_DIM        },
@@ -614,9 +654,10 @@ function HelpModal({ onClose }) {
         <div style={{ fontSize: 13, color: BODY_CLR, lineHeight: 1.65, marginBottom: 14 }}>
           Use FinkWatch to monitor your current open positions in real-time.
         </div>
-        <Link
-          to="/watch"
-          onClick={onClose}
+        <a
+          href={FINKWATCH_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             display: "block", padding: "13px 0", background: TEAL_DIM,
             color: TEAL, border: "1px solid " + TEAL + "40", borderRadius: 8,
@@ -625,15 +666,15 @@ function HelpModal({ onClose }) {
           }}
         >
           📊 Open FinkWatch
-        </Link>
+        </a>
       </div>
     </div>
   );
 }
 
-// ── Ledger ────────────────────────────────────────────────────────────────────
+// ── App ───────────────────────────────────────────────────────────────────────
 
-export default function Ledger() {
+export default function App() {
   const [transactions, setTransactions] = useState(function() {
     try {
       const s = localStorage.getItem(STORAGE_KEY);
@@ -687,6 +728,7 @@ export default function Ledger() {
     return g;
   }, [groups, sortMode, filterMode]);
 
+  // ── Toast helpers ──
   const addToast = useCallback(function(message, type) {
     const id = crypto.randomUUID();
     setToasts(function(prev) { return [...prev, { id, message, type: type || "success" }]; });
@@ -699,6 +741,7 @@ export default function Ledger() {
     setToasts(function(prev) { return prev.filter(function(t) { return t.id !== id; }); });
   }, []);
 
+  // ── Backup ──
   const handleBackup = useCallback(function() {
     if (!transactions || !transactions.length) { addToast("Nothing to back up.", "error"); return; }
     navigator.clipboard.writeText(JSON.stringify(transactions)).then(function() {
@@ -708,6 +751,7 @@ export default function Ledger() {
     });
   }, [transactions, addToast]);
 
+  // ── Restore ──
   const handleRestoreData = useCallback(function(parsed) {
     const tickerSet = new Set(parsed.map(function(t) { return t.ticker; }));
     setConfirm({
@@ -723,6 +767,7 @@ export default function Ledger() {
     });
   }, [addToast]);
 
+  // ── Parse CSV ──
   const handleParse = useCallback(function() {
     setError(""); setParseResult(null);
     if (!csvText.trim()) { setError("Paste your Fidelity activity CSV first."); return; }
@@ -743,6 +788,7 @@ export default function Ledger() {
     }, 50);
   }, [csvText]);
 
+  // ── Commit CSV ──
   const handleCommit = useCallback(function() {
     if (!parseResult) return;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(parseResult.transactions));
@@ -753,6 +799,7 @@ export default function Ledger() {
     addToast("Imported " + parseResult.transactions.length + " transactions across " + tickers.size + " tickers ✓");
   }, [parseResult, addToast]);
 
+  // ── Clear ──
   const handleClear = useCallback(function() {
     setConfirm({
       message: "Clear all data? This cannot be undone. Backup first if needed.",
@@ -765,6 +812,7 @@ export default function Ledger() {
     });
   }, []);
 
+  // ── Re-import ──
   const handleReImport = useCallback(function() {
     if (transactions) {
       setConfirm({
@@ -779,6 +827,7 @@ export default function Ledger() {
     }
   }, [transactions]);
 
+  // ── Toggle expand with scroll ──
   const toggle = useCallback(function(ticker) {
     setExpanded(function(e) {
       const n = Object.assign({}, e);
@@ -809,42 +858,47 @@ export default function Ledger() {
   };
 
   return (
-    <div style={{ minHeight: "100%", background: BG, color: HEAD, fontFamily: SANS, maxWidth: 720, margin: "0 auto", paddingBottom: 80 }}>
+    <div style={{ minHeight: "100vh", background: BG, color: HEAD, fontFamily: SANS, maxWidth: 720, margin: "0 auto", paddingBottom: 80 }}>
 
-      {/* ── Sub-toolbar (no title — Layout provides the FinkHub banner) ── */}
-      <div style={{
+      {/* ── Header ── */}
+      <header style={{
         background: "linear-gradient(135deg, #006978 0%, #0097a7 100%)",
         padding: "0 16px", display: "flex", alignItems: "center",
-        justifyContent: "space-between", height: 48, gap: 10,
+        justifyContent: "space-between", height: 56, gap: 10,
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 9, minWidth: 0 }}>
           <img
             src={FINK_IMAGE} alt=""
-            style={{ width: 26, height: 26, borderRadius: "50%", border: "2px solid rgba(255,255,255,0.3)", flexShrink: 0 }}
+            style={{ width: 28, height: 28, borderRadius: "50%", border: "2px solid rgba(255,255,255,0.3)", flexShrink: 0 }}
           />
-          <span style={{ fontFamily: MONO, fontWeight: 600, fontSize: 14, color: "rgba(255,255,255,0.85)", whiteSpace: "nowrap" }}>P&L Ledger</span>
+          <span style={{ fontFamily: MONO, fontWeight: 600, fontSize: 18, color: "#fff", letterSpacing: -0.5, whiteSpace: "nowrap" }}>FinkLedger</span>
+          <span style={{ fontSize: 10, color: "rgba(255,255,255,0.6)", background: "rgba(0,0,0,0.2)", padding: "2px 7px", borderRadius: 10, letterSpacing: 0.5 }}>P&L</span>
         </div>
         <div style={{ display: "flex", gap: 7, alignItems: "center", flexShrink: 0 }}>
           {transactions && (
             <>
-              <button className="icon-btn" onClick={handleBackup}                        style={iconBtn} title="Backup to clipboard">💾</button>
-              <button className="icon-btn" onClick={function() { setShowRestore(true); }} style={iconBtn} title="Restore from backup">📥</button>
+              <button className="icon-btn" onClick={handleBackup}                       style={iconBtn} title="Backup to clipboard">💾</button>
+              <button className="icon-btn" onClick={function() { setShowRestore(true);}} style={iconBtn} title="Restore from backup" >📥</button>
             </>
           )}
           <button className="icon-btn" onClick={function() { setShowHelp(true); }} style={iconBtn} title="Help">ℹ️</button>
-          <Link
-            to="/watch"
+          <a
+            href={FINKWATCH_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{ fontSize: 12, color: "rgba(255,255,255,0.85)", textDecoration: "none", padding: "6px 10px", border: "1px solid rgba(255,255,255,0.25)", borderRadius: 6, whiteSpace: "nowrap", height: 34, display: "flex", alignItems: "center" }}
           >
             📊 FinkWatch
-          </Link>
+          </a>
         </div>
-      </div>
+      </header>
 
       {/* ── Summary Screen ── */}
       {screen === "summary" && transactions && (
         <div>
+          {/* Sticky: totals + sort/filter */}
           <div style={{ position: "sticky", top: 0, zIndex: 20, background: SURFACE, borderBottom: "1px solid " + BORDER }}>
+            {/* Totals bar */}
             <div style={{ padding: "10px 16px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div>
@@ -889,6 +943,7 @@ export default function Ledger() {
               )}
             </div>
 
+            {/* Sort + Filter pills */}
             <div style={{
               display: "flex", alignItems: "center", gap: 8,
               padding: "8px 12px", borderTop: "1px solid " + BORDER,
@@ -908,6 +963,7 @@ export default function Ledger() {
             </div>
           </div>
 
+          {/* Ticker list */}
           <div style={{ padding: "10px 12px" }}>
             {displayGroups.length === 0 && (
               <div style={{ textAlign: "center", padding: "48px 20px", color: MUTED, fontSize: 13 }}>
@@ -930,6 +986,7 @@ export default function Ledger() {
                     borderLeft: "3px solid " + (hasOpen ? TEAL : DIM),
                   }}
                 >
+                  {/* Ticker row */}
                   <div
                     className="ticker-row"
                     style={{
@@ -969,6 +1026,7 @@ export default function Ledger() {
                     </span>
                   </div>
 
+                  {/* Expanded chapters */}
                   {isExpanded && (
                     <div style={{ background: BG, animation: "expandIn 0.15s ease" }}>
                       {chapters.map(function(chapter, ci) {
@@ -976,6 +1034,7 @@ export default function Ledger() {
                         const statusMeta = CHAPTER_STATUS_META[chapter.status] || CHAPTER_STATUS_META.OPEN;
                         const showRollConnector = ci > 0 && chapters[ci - 1].status === "ROLLED";
 
+                        // Opening credit / debit
                         const openingAmt = chapter.transactions
                           .filter(function(t) { return t.action === "STO" || t.action === "BTO"; })
                           .reduce(function(s, t) { return s + (t.amount || 0); }, 0);
@@ -999,6 +1058,7 @@ export default function Ledger() {
                               </div>
                             )}
 
+                            {/* Chapter header */}
                             <div style={{
                               display: "flex", justifyContent: "space-between", alignItems: "flex-start",
                               padding: "9px 14px", background: SURFACE2,
@@ -1042,6 +1102,7 @@ export default function Ledger() {
                               </span>
                             </div>
 
+                            {/* Transaction lines */}
                             {chapter.transactions.map(function(t) {
                               const meta = ACTION_META[t.action] || { label: t.action, color: MUTED, bg: DIM + "15" };
                               return (
@@ -1082,6 +1143,7 @@ export default function Ledger() {
                         );
                       })}
 
+                      {/* Subtotal footer */}
                       <div style={{
                         display: "flex", justifyContent: "space-between",
                         padding: "8px 14px", borderTop: "1px solid " + BORDER,
@@ -1097,6 +1159,7 @@ export default function Ledger() {
             })}
           </div>
 
+          {/* Footer actions */}
           <div style={{
             display: "flex", justifyContent: "flex-end", gap: 10,
             padding: "14px 16px", borderTop: "1px solid " + BORDER,
@@ -1136,7 +1199,7 @@ export default function Ledger() {
             <div style={{ fontFamily: MONO, fontSize: 20, fontWeight: 600, color: HEAD, marginBottom: 4 }}>FinkLedger</div>
             <div style={{ fontSize: 13, color: MUTED }}>Paste your Fidelity Activity History CSV to get started</div>
             <div style={{ fontSize: 12, color: DIM, marginTop: 4 }}>
-              Accounts → Activity &amp; Orders → History → Export CSV
+              Accounts \u2192 Activity &amp; Orders \u2192 History \u2192 Export CSV
             </div>
           </div>
 
@@ -1207,6 +1270,7 @@ export default function Ledger() {
             </div>
           )}
 
+          {/* Back to summary if data exists */}
           {transactions && (
             <button
               style={{
@@ -1217,7 +1281,7 @@ export default function Ledger() {
               }}
               onClick={function() { setScreen("summary"); setCsvText(""); setParseResult(null); setError(""); }}
             >
-              ← Back to Summary
+              \u2190 Back to Summary
             </button>
           )}
         </div>
