@@ -35,7 +35,7 @@ export default function Layout() {
         {/* Left: logo */}
         <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
           <img
-            src="/fink-head.png"
+            src="/fink-icon.png"
             alt="FinkHub"
             style={{ width: 28, height: 28, borderRadius: "50%", objectFit: "cover", objectPosition: "center top", flexShrink: 0 }}
           />
