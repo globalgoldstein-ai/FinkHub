@@ -37,7 +37,7 @@ export default function Layout() {
           <img
             src="/fink-icon.png"
             alt="FinkHub"
-            style={{ width: 40, height: 40, borderRadius: "50%"
+            style={{ width: 40, height: 40, borderRadius: "50%"}}
 
           />
           <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 15, fontWeight: 600, color: "#f1f5f9", whiteSpace: "nowrap" }}>
