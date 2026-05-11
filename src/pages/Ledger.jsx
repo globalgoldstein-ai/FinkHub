@@ -80,8 +80,9 @@ function parseDate(raw) {
 
 function parseNum(raw) {
   if (!raw || raw.trim() === "") return 0;
-  return parseFloat(raw.replace(/,/g, "")) || 0;
+  return parseFloat(raw.replace(/[$,]/g, "")) || 0;
 }
+
 
 const SKIP = [
   /SPAXX/i, /FIDELITY GOVERNMENT MONEY MARKET/i,
